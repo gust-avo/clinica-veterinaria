@@ -1,8 +1,22 @@
 import prisma from '../prismaClient.js';
 
 export const listarConsultasGTS = async(req,res)=>{
-    const consultas = await prisma.consulta.findMany();
-    res.json(consultas);
+    const consultas = await prisma.consulta.findMany({
+        include:{
+            animal:true
+        }
+    });
+
+    const resultado = consultas.map(c=>({
+        id:c.id,
+        animal:c.animal.nome,
+        data_consulta:c.data_consulta,
+        motivo:c.motivo,
+        diagnostico:c.diagnostico,
+        veterinario:c.veterinario
+    }));
+
+    res.json(resultado);
 };
 
 export const buscarConsultaPorIdGTS = async(req,res)=>{
@@ -31,7 +45,6 @@ export const criarConsultaGTS = async(req,res)=>{
     res.status(201).json(consulta);
 };
 
-// 🔥 JOIN (continua obrigatório)
 export const listarConsultasPorAnimalGTS = async(req,res)=>{
     const {id} = req.params;
 
@@ -40,5 +53,14 @@ export const listarConsultasPorAnimalGTS = async(req,res)=>{
         include:{animal:true}
     });
 
-    res.json(consultas);
+    const resultado = consultas.map(c=>({
+        id:c.id,
+        animal:c.animal.nome,
+        data_consulta:c.data_consulta,
+        motivo:c.motivo,
+        diagnostico:c.diagnostico,
+        veterinario:c.veterinario
+    }));
+
+    res.json(resultado);
 };

@@ -14,6 +14,17 @@ app.use('/tutores',tutoresRoutes);
 app.use('/animais',animaisRoutes);
 app.use('/consultas',consultasRoutes);
 
+app.get('/',(req,res)=>{
+    res.json({
+        mensagem:'API Clínica Veterinária funcionando',
+        rotas:{
+            tutores:'/tutores',
+            animais:'/animais',
+            consultas:'/consultas'
+        }
+    });
+});
+
 app.listen(3000,()=>{
     console.log('Servidor rodando na porta 3000');
 });
